@@ -11,6 +11,10 @@ public enum PlayerState
     idle,Run,Jump,Att,Death
 }
 
+public enum PlayerVector
+{
+    Left,Right
+}
 
 public class playerCtrl : MonoBehaviour
 {
@@ -19,12 +23,13 @@ public class playerCtrl : MonoBehaviour
     public AudioClip[] Sound;
     public Animator anim;
     public PlayerState PS;
+    public PlayerVector PV;
     public GameObject RenderObj;
     public bool LeftMove = false;
     public bool RightMove = false;
     float f_playerSpeed = 4.0f;
     Vector3 moveVelocity = Vector3.zero;
-   
+    int jumpCount = 0;
     // Update is called once per frame
   
     private void FixedUpdate()
@@ -45,6 +50,7 @@ public class playerCtrl : MonoBehaviour
     public void ButtonDownLeft()
     {
         PS = PlayerState.Run;
+        PV = PlayerVector.Left;
         LeftMove = true;
         anim.SetTrigger("Run");
         anim.SetBool("idel", false);
@@ -53,21 +59,24 @@ public class playerCtrl : MonoBehaviour
     }
     public void ButtonUpLeft()
     {
-      
-      LeftMove = false;
+
+        anim.SetBool("idel", true);
+        LeftMove = false;
 
     }
     public void ButtonDownRight()
     {
        RightMove = true;
        PS = PlayerState.Run;
-        anim.SetTrigger("Run");
-        anim.SetBool("idel", false);
+       PV = PlayerVector.Right;
+       anim.SetTrigger("Run");
+       anim.SetBool("idel", false);
        RenderObj.GetComponent<SpriteRenderer>().flipX = false;
     }
     public void ButtonUpRight()
     {
         RightMove = false;
+        anim.SetBool("idel", true);
     }
     
     public void ButtonDonwJump()
@@ -78,23 +87,24 @@ public class playerCtrl : MonoBehaviour
     public void ButtonAtt()
     {
         PS = PlayerState.Att;    
-        if (LeftMove)
+        anim.SetTrigger("Att");
+        if (PV == PlayerVector.Left)
         {
             RenderObj.GetComponent<SpriteRenderer>().flipX = true;
         }
-        else if (RightMove)
+        else if (PV == PlayerVector.Right)
         {
             RenderObj.GetComponent<SpriteRenderer>().flipX = false;
         }
-        anim.SetBool("idel", false);
-        anim.SetTrigger("Att");
-
     }
     void Jump()
     {
         PS = PlayerState.Jump;
-        
-        this.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0,f_jumpPower,0));
+        jumpCount++;
+        if(jumpCount ==1)
+        {
+            this.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0,f_jumpPower,0));
+        }
         
     }
     void GameOver()
@@ -109,7 +119,7 @@ public class playerCtrl : MonoBehaviour
         {
             PS = PlayerState.Run;
             Debug.Log("¶¥¹Ù´Ú");
-           
+            jumpCount = 0;
         }
         if(col.gameObject.tag == "enemy" && PS == PlayerState.Att)
         {

@@ -7,20 +7,31 @@ using Unity.VisualScripting;
 
 public class GunShot : MonoBehaviour
 {
-
-    public float f_bulletPower = 10.0f;
-    public float f_BulletSpeed = 5.0f;
     public GameObject Bullet;
-    public Transform BulletPos;
+    public Transform BulletRPos;
+    public Transform BulletLPos;
     GameObject bullet;
-
+    public GameObject player;
     public void buttonDownAtt()
     {
-        bullet = Instantiate(Bullet);
-        bullet.transform.position = BulletPos.position;
-        Vector3 bulletVelocity = new Vector3(1.0f,0,0);
-        bullet.GetComponent<Rigidbody>().AddForce(new Vector3(1000, 0, 0));
-        Destroy(bullet, 3.0f);
+        if(player.GetComponent<playerCtrl>().PV == PlayerVector.Right)
+        {
+            bullet = Instantiate(Bullet);
+            bullet.transform.position = BulletRPos.position;
+            Vector3 bulletVelocity = new Vector3(1.0f,0,0);
+            bullet.GetComponent<Rigidbody>().AddForce(new Vector3(1000, 0, 0));
+            Destroy(bullet, 3.0f);
+        }
+       else  if (player.GetComponent<playerCtrl>().PV == PlayerVector.Left)
+        {
+            bullet = Instantiate(Bullet);
+            bullet.transform.position = BulletLPos.position;
+            Vector3 bulletVelocity = new Vector3(1.0f, 0, 0);
+            bullet.GetComponent<Rigidbody>().AddForce(new Vector3(-1000, 0, 0));
+            Destroy(bullet, 3.0f);
+        }
+
+
     }
 
     
