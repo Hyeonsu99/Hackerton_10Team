@@ -2,20 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
+
 
 public enum PlayerState
 {
-    idle,Run,Jump,Att,Death
+    idle, Run, Jump, Att, Death
 }
 
 public enum PlayerVector
 {
-    Left,Right
+     Right, Left
 }
-
 public class playerCtrl : MonoBehaviour
 {
     
@@ -27,21 +25,21 @@ public class playerCtrl : MonoBehaviour
     public GameObject RenderObj;
     public bool LeftMove = false;
     public bool RightMove = false;
-    float f_playerSpeed = 4.0f;
+   public float f_playerSpeed = 1.1f;
     Vector3 moveVelocity = Vector3.zero;
     int jumpCount = 0;
     // Update is called once per frame
-  
+    
     private void FixedUpdate()
     {
        if(LeftMove)
         {
-            moveVelocity = new Vector3(-0.50f, 0, 0);
+            moveVelocity = new Vector3(-1f, 0, 0);
             transform.position += moveVelocity* f_playerSpeed * Time.deltaTime;
         }
        if(RightMove)
         {
-            moveVelocity = new Vector3(+0.50f, 0, 0);
+            moveVelocity = new Vector3(+1f, 0, 0);
             transform.position += moveVelocity * f_playerSpeed * Time.deltaTime;
         }
     }
@@ -52,15 +50,14 @@ public class playerCtrl : MonoBehaviour
         PS = PlayerState.Run;
         PV = PlayerVector.Left;
         LeftMove = true;
-        anim.SetTrigger("Run");
-        anim.SetBool("idel", false);
+        anim.SetBool("Run", true);
         RenderObj.GetComponent<SpriteRenderer>().flipX = true;
         
     }
     public void ButtonUpLeft()
     {
 
-        anim.SetBool("idel", true);
+        anim.SetBool("Run", false);
         LeftMove = false;
 
     }
@@ -69,14 +66,14 @@ public class playerCtrl : MonoBehaviour
        RightMove = true;
        PS = PlayerState.Run;
        PV = PlayerVector.Right;
-       anim.SetTrigger("Run");
-       anim.SetBool("idel", false);
+      
+       anim.SetBool("Run", true);
        RenderObj.GetComponent<SpriteRenderer>().flipX = false;
     }
     public void ButtonUpRight()
     {
         RightMove = false;
-        anim.SetBool("idel", true);
+        anim.SetBool("Run", false);
     }
     
     public void ButtonDonwJump()
@@ -88,7 +85,7 @@ public class playerCtrl : MonoBehaviour
     {
         PS = PlayerState.Att;    
         anim.SetTrigger("Att");
-        soundPlay(0, GetAudioClip(0));
+        
         if (PV == PlayerVector.Left)
         {
             RenderObj.GetComponent<SpriteRenderer>().flipX = true;
@@ -97,6 +94,7 @@ public class playerCtrl : MonoBehaviour
         {
             RenderObj.GetComponent<SpriteRenderer>().flipX = false;
         }
+
     }
     void Jump()
     {
@@ -104,6 +102,7 @@ public class playerCtrl : MonoBehaviour
         jumpCount++;
         if(jumpCount ==1)
         {
+            anim.SetTrigger("Jump");
             this.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,f_jumpPower));
         }
         

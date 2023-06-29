@@ -151,6 +151,16 @@ public class EnemyController : MonoBehaviour
         {
             TakeDamage(3);
         }
+
+        if(collision.CompareTag("L_Sword"))
+        {
+            TakeDamage(5);
+        }
+
+        if (collision.CompareTag("R_Sword"))
+        {
+            TakeDamage(5);
+        }
     }
 }
 
