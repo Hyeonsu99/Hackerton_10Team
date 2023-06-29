@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-
-
-public class EnemyController : MonoBehaviour
+public class BossMove : MonoBehaviour
 {
     [SerializeField] private Transform targetPlayer;
 
@@ -13,18 +12,21 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private float range = 0f;
     [SerializeField] private float distance;
-    [SerializeField] private int moveFlag = 0;
+    public int moveFlag = 0;
 
-    [SerializeField] private int hp = 10;
+    [SerializeField] private int hp = 30;
 
     private Vector3 move;
 
     private bool isTraceAtk = false;
+    private bool isAttack = true;
 
     Animator animator;
     SpriteRenderer spriter;
     Rigidbody2D rgb2d;
     Collider2D coll;
+    private bool isRealAtk = false;
+    public GameObject boss;
 
     private void Start()
     {
@@ -53,16 +55,23 @@ public class EnemyController : MonoBehaviour
         moveFlag = Random.Range(-1, 2);
         if (moveFlag == 0)
         {
-            // animator.SetBool("isPatrol", false); // 걷는 모션 비활성화
+            animator.SetBool("Move", false); // 걷는 모션 비활성화
         }
         else
         {
-            // animator.SetBool("isPatrol", true);  // 걷는 모션 활성화
+            animator.SetBool("Move", true);  // 걷는 모션 활성화
         }
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         StartCoroutine(PatrolMove());
+    }
+
+    IEnumerator NormalAttack()
+    {
+        yield return new WaitForSeconds(3f);
+        animator.SetTrigger("Attack");
+        boss.GetComponent<BossAttMgr>().BossAttack();
     }
 
     private void Move()
@@ -71,13 +80,23 @@ public class EnemyController : MonoBehaviour
         distance = Vector3.Distance(transform.position, targetPlayer.position);
         string distFlag = "";
 
-        if (distance <= range)
+        if (distance <= range && !isTraceAtk)
         {
+            Debug.Log("AA");
             isTraceAtk = true;
+            if (isAttack)
+            {
+                animator.SetTrigger("Attack");
+                boss.GetComponent<BossAttMgr>().BossAttack();
+                isAttack = false;
+            }
+            StartCoroutine("NormalAttack");
         }
-        else if (distance > range)
+        else if (distance > range && isTraceAtk)
         {
+            Debug.Log("BB");
             isTraceAtk = false;
+            isAttack = true;
         }
 
 
@@ -94,7 +113,6 @@ public class EnemyController : MonoBehaviour
             {
                 transform.localScale = new Vector3(1, 1, 1);
             }
-            //animator.SetTrigger(""); // 공격 애니메이션 적용
         }
         else
         {
@@ -121,19 +139,28 @@ public class EnemyController : MonoBehaviour
 
         transform.position += movevelocity * patrolSpeed * Time.deltaTime;
     }
-    public void TakeDamage(int dmg)
+
+    private void SpecialAttack()
     {
+        animator.SetTrigger("SPAttack");
+        rgb2d.AddForce(new Vector3(850 * moveFlag, 0, 0));
+    }
+
+    public void HitDamage(int dmg)
+    {
+        
         hp -= dmg;
 
         if (hp > 0)
         {
             StartCoroutine("HitEffect");
-            
         }
         else
         {
-            // 적 죽음 애니메이션 or 이펙트
-            Destroy(this.gameObject);
+            animator.SetTrigger("Death");
+            Destroy(gameObject, 0.8f);
+
+            SceneManager.LoadScene(""); // 게임 클리어 씬
         }
     }
 
@@ -148,23 +175,25 @@ public class EnemyController : MonoBehaviour
             moveFlag = 1;
         }
 
-        if (collision.CompareTag("bullet"))
+        if (collision.CompareTag("R_SP"))
         {
-            TakeDamage(3);
+            moveFlag = -1;
+            SpecialAttack();
         }
-        if (collision.CompareTag("L_Sword"))
+        else if (collision.CompareTag("L_SP"))
         {
-            TakeDamage(5);
-        }
-        if (collision.CompareTag("R_Sword"))
-        {
-            TakeDamage(5);
+            rgb2d.velocity = Vector3.zero;
         }
 
+        if (collision.CompareTag("R_Sword") || collision.CompareTag("L_Sword"))
+        {
+            
+            isRealAtk = true;
+            if(isRealAtk)
+            {
+                HitDamage(10);
+                isRealAtk = false;
+            }
+        }
     }
-
-    
-
 }
-
-

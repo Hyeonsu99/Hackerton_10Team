@@ -5,37 +5,28 @@ using UnityEngine;
 
 public class SwordMgr : MonoBehaviour
 {
-    public GameObject swordRPos;
-    public GameObject swordLPos;
+    public GameObject swordR;
+    public GameObject swordL;
+    public Transform swordRPos;
+    public Transform swordLPos;
     public GameObject player;
-   
-    private void Start()
-    {
-        swordRPos.SetActive(false);
-        swordLPos.SetActive(false);
-    }
+    GameObject swordr;
+    GameObject swordl;
 
     public void buttonDownAtt()
     {
         if (player.GetComponent<playerCtrl>().PV == PlayerVector.Right)
         {
-            swordRPos.SetActive(true);
-            Invoke("RActiveAtt", 0.5f);
+            swordr = Instantiate(swordR);
+            swordr.transform.position = swordRPos.position;
+            Destroy(swordr, 1f);
         }
         else if (player.GetComponent<playerCtrl>().PV == PlayerVector.Left)
         {
-            swordLPos.SetActive(true);
-            Invoke("LActiveAtt", 0.5f);
+            swordl = Instantiate(swordL);
+            swordl.transform.position = swordLPos.position;
+            Destroy(swordl, 1f);
         }
     }
-    void RActiveAtt()
-    {
-        swordRPos.SetActive(false);
-    }
-    void LActiveAtt()
-    {
-        swordLPos.SetActive(false);
-    }
-   
-
+    
 }

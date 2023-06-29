@@ -14,6 +14,11 @@ TagManager:
   - R_EndPoint
   - L_Sword
   - R_Sword
+  - R_SP
+  - L_SP
+  - L_bossAtt
+  - R_bossAtt
+  - Boss
   layers:
   - Default
   - TransparentFX
