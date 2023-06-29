@@ -2,25 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform targetPlayer;
 
     [SerializeField] private float patrolSpeed = 2f;
-    [SerializeField] private float range = 6f;
+
+    [SerializeField] private float range = 0f;
     [SerializeField] private float distance;
-    private Vector3 move;
     [SerializeField] private int moveFlag = 0;
 
-    private Animator animator;
-    private float chasingSpeed;
-    private bool isChasing = false;
-    private bool reachedEnd = false;
+    [SerializeField] private int hp = 10;
+
+    private Vector3 move;
+
+    private bool isTraceAtk = false;
+
+    Animator animator;
+    SpriteRenderer spriter;
+    Rigidbody2D rgb2d;
+    Collider2D coll;
+    
+
+    
 
     private void Start()
     {
+        coll = GetComponent<Collider2D>();
+        rgb2d = GetComponent<Rigidbody2D>();
+        spriter = GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponentInChildren<Animator>();
         StartCoroutine(PatrolMove());
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    IEnumerator HitEffect()
+    {
+        spriter.color = new Color32(255, 255, 255, 160);
+        yield return new WaitForSeconds(0.1f);
+        spriter.color = new Color32(255, 255, 255, 255);
+        yield return null;
     }
 
     IEnumerator PatrolMove()
@@ -28,21 +55,16 @@ public class EnemyController : MonoBehaviour
         moveFlag = Random.Range(-1, 2);
         if (moveFlag == 0)
         {
-            // animator.SetBool("isPatrol", false);
+            // animator.SetBool("isPatrol", false); // 걷는 모션 비활성화
         }
         else
         {
-            // animator.SetBool("isPatrol", true);
+            // animator.SetBool("isPatrol", true);  // 걷는 모션 활성화
         }
 
         yield return new WaitForSeconds(2f);
 
         StartCoroutine(PatrolMove());
-    }
-
-    private void FixedUpdate()
-    {
-        Move();
     }
 
     private void Move()
@@ -53,25 +75,28 @@ public class EnemyController : MonoBehaviour
 
         if (distance <= range)
         {
-            isChasing = true;
+            isTraceAtk = true;
         }
         else if (distance > range)
         {
-            isChasing = false;
+            isTraceAtk = false;
         }
 
-        if (isChasing)
+
+        if (isTraceAtk)
         {
             Vector3 playerPos = targetPlayer.transform.position;
+            movevelocity = Vector3.zero;
 
             if (playerPos.x < transform.position.x)
             {
-                distFlag = "Left";
+                transform.localScale = new Vector3(-1, 1, 1);
             }
             else if (playerPos.x > transform.position.x)
             {
-                distFlag = "Right";
+                transform.localScale = new Vector3(1, 1, 1);
             }
+            //animator.SetTrigger(""); // 공격 애니메이션 적용
         }
         else
         {
@@ -99,33 +124,31 @@ public class EnemyController : MonoBehaviour
         transform.position += movevelocity * patrolSpeed * Time.deltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void TakeDamage(int dmg)
     {
-        if (isChasing)
+        hp -= dmg;
+
+        if (hp > 0)
         {
-            if (collision.CompareTag("R_EndPoint"))
-            {
-                isChasing = false;
-                moveFlag = -1;
-            }
-            else if (collision.CompareTag("L_EndPoint"))
-            {
-                isChasing = false;
-                moveFlag = 1;
-            }
+            StartCoroutine("HitEffect");
         }
-        else {
-            if (collision.CompareTag("R_EndPoint"))
-            {
-                moveFlag = -1;
-            }
-            else if (collision.CompareTag("L_EndPoint"))
-            {
-                moveFlag = 1;
-            }
+        else
+        {
+            // 적 죽음 애니메이션 or 이펙트
         }
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("R_EndPoint"))
+        {
+            moveFlag = -1;
+        }
+        else if (collision.CompareTag("L_EndPoint"))
+        {
+            moveFlag = 1;
+        }
+    }
 }
 
 
