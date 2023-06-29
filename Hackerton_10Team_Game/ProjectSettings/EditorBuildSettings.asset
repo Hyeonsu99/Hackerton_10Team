@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/1_ImjinExplain.unity
     guid: 7a38b00c874a9bb43aef011e2c2d09c9
+  - enabled: 1
+    path: Assets/Scenes/ClearScene.unity
+    guid: 05fcb82b75a3bf1428ca772c804f12bf
   m_configObjects: {}
