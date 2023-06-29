@@ -111,8 +111,10 @@ public class playerCtrl : MonoBehaviour
     void GameOver()
     {
         PS = PlayerState.Death;
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene("DeathScene");
     }
+
+    
  
     private AudioClip GetAudioClip(int Num)
     {

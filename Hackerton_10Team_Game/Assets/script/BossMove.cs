@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,6 +42,8 @@ public class BossMove : MonoBehaviour
     {
         Move();
     }
+
+    
 
     IEnumerator HitEffect()
     {
@@ -148,7 +151,6 @@ public class BossMove : MonoBehaviour
 
     public void HitDamage(int dmg)
     {
-        
         hp -= dmg;
 
         if (hp > 0)
@@ -158,11 +160,17 @@ public class BossMove : MonoBehaviour
         else
         {
             animator.SetTrigger("Death");
-            Destroy(gameObject, 0.8f);
-
-            SceneManager.LoadScene(""); // 게임 클리어 씬
+            Destroy(gameObject, 1.7f);
         }
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.LoadScene(4);
+    }
+
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

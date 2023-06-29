@@ -25,7 +25,7 @@ public class SwordMgr : MonoBehaviour
         else if (player.GetComponent<playerCtrl>().PV == PlayerVector.Left)
         {
             swordl = Instantiate(swordL);
-            swordr.SetActive(true);
+            swordl.SetActive(true);
             swordl.transform.position = swordLPos.position;
             Destroy(swordl, 1f);
         }
