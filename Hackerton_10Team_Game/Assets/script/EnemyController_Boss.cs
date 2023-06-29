@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 
-public class EnemyController : MonoBehaviour
+public class EnemyController_Boss : MonoBehaviour
 {
     [SerializeField] private Transform targetPlayer;
 
@@ -16,17 +16,18 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public int moveFlag = 0;
 
     [SerializeField] private int hp = 10;
-    public GameObject Player;
 
     private Vector3 move;
-    public GameObject enemy;
-    private bool isTraceAtk = false;
 
-    public Animator animator;
+    private bool isTraceAtk = false;
+    private bool isRealAtk = false;
+    public GameObject boss;
+    private bool isAttack = true;
+
+    Animator animator;
     SpriteRenderer spriter;
     Rigidbody2D rgb2d;
     Collider2D coll;
-    bool isAtt= true;
 
     private void Start()
     {
@@ -41,12 +42,7 @@ public class EnemyController : MonoBehaviour
     {
         Move();
     }
-    IEnumerator NormalAttack()
-    {
-        yield return new WaitForSeconds(3f);
-        animator.SetTrigger("ATK");
-        GetComponentInChildren<EnemyAttMgr>().EnemyAtt();
-    }
+
     IEnumerator HitEffect()
     {
         spriter.color = new Color32(255, 255, 255, 160);
@@ -71,27 +67,37 @@ public class EnemyController : MonoBehaviour
 
         StartCoroutine(PatrolMove());
     }
-    
+
+    IEnumerator NormalAttack()
+    {
+        yield return new WaitForSeconds(3f);
+        animator.SetTrigger("Attack");
+        boss.GetComponent<BossAttMgr>().BossAttack();
+    }
+
     private void Move()
     {
         Vector3 movevelocity = Vector3.zero;
         distance = Vector3.Distance(transform.position, targetPlayer.position);
         string distFlag = "";
+
         if (distance <= range && !isTraceAtk)
         {
+            Debug.Log("AA");
             isTraceAtk = true;
-            
-            if(isAtt)
+            if (isAttack)
             {
-                StartCoroutine("NormalAttack");
-                isAtt = false;
+                animator.SetTrigger("Attack");
+                boss.GetComponent<BossAttMgr>().BossAttack();
+                isAttack = false;
             }
             StartCoroutine("NormalAttack");
         }
         else if (distance > range && isTraceAtk)
         {
+            Debug.Log("BB");
             isTraceAtk = false;
-            isAtt = true;
+            isAttack = true;
         }
 
 
@@ -103,14 +109,12 @@ public class EnemyController : MonoBehaviour
             if (playerPos.x < transform.position.x)
             {
                 transform.localScale = new Vector3(-1, 1, 1);
-            
             }
             else if (playerPos.x > transform.position.x)
             {
                 transform.localScale = new Vector3(1, 1, 1);
-             
             }
-            animator.SetTrigger("ATK"); // 공격 애니메이션 적용
+            //animator.SetTrigger(""); // 공격 애니메이션 적용
         }
         else
         {
@@ -176,23 +180,10 @@ public class EnemyController : MonoBehaviour
         {
             TakeDamage(5);
         }
-        
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.tag == "L_Sword" )
-        {
-            TakeDamage(5);
-        }
-
-        if (collision.gameObject.tag == "R_Sword")
-        {
-            TakeDamage(5);
-        }
-    }
+    
 
 }
 

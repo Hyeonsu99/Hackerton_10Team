@@ -23,10 +23,6 @@ public class Portal : MonoBehaviour
         {
             Debug.Log("충돌");
             //SceneManager.LoadScene(transferMapName);
-        }
-
-        if(collision.gameObject.name == "Player")
-        {
             SceneManager.LoadScene(transferMapName);
         }
     }
