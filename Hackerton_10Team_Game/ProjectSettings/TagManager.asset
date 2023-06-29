@@ -12,6 +12,8 @@ TagManager:
   - 2floor
   - L_EndPoint
   - R_EndPoint
+  - L_Sword
+  - R_Sword
   layers:
   - Default
   - TransparentFX
