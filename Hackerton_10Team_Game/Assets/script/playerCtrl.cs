@@ -149,6 +149,10 @@ public class playerCtrl : MonoBehaviour
             PS = PlayerState.Run;
             jumpCount = 0;
         }
+        if(col.gameObject.tag == "potal1")
+        {
+            SceneManager.LoadScene(""); // boss room ¿‘¿Â
+        }
     }
 }
 

@@ -12,6 +12,16 @@ public class BulletShot : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        
+        if(col.CompareTag("2floor"))
+        {
+            Destroy(this.gameObject);
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "2floor")
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

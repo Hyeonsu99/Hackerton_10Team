@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Gound
+  - bullet
+  - potal1
+  - Undefined
+  - 2floor
   layers:
   - Default
   - TransparentFX
