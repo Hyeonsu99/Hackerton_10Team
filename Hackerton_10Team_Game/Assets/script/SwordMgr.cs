@@ -28,7 +28,6 @@ public class SwordMgr : MonoBehaviour
             Invoke("LActiveAtt", 0.5f);
         }
     }
-
     void RActiveAtt()
     {
         swordRPos.SetActive(false);
