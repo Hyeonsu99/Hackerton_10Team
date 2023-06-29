@@ -16,7 +16,7 @@ public class EnemyBullet : MonoBehaviour
 
         // 총알의 수명을 측정하여 제한된 시간이 지나면 삭제
         timer += Time.deltaTime;
-        if (timer >= 3f)
+        if (timer >= 2f)
         {
             Destroy(gameObject);
         }
@@ -24,7 +24,7 @@ public class EnemyBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             EnemyController enemyHealth = collision.GetComponent<EnemyController>();
 
