@@ -24,9 +24,6 @@ public class EnemyController : MonoBehaviour
     SpriteRenderer spriter;
     Rigidbody2D rgb2d;
     Collider2D coll;
-    
-
-    
 
     private void Start()
     {
@@ -48,6 +45,11 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         spriter.color = new Color32(255, 255, 255, 255);
         yield return null;
+    }
+
+    public void TakeDamage(float dmg)
+    {
+        throw new System.NotImplementedException();
     }
 
     IEnumerator PatrolMove()
@@ -124,7 +126,7 @@ public class EnemyController : MonoBehaviour
         transform.position += movevelocity * patrolSpeed * Time.deltaTime;
     }
 
-    public void TakeDamage(int dmg)
+    public void HitDamage(int dmg)
     {
         hp -= dmg;
 
