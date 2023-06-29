@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -151,17 +152,31 @@ public class EnemyController : MonoBehaviour
         {
             TakeDamage(3);
         }
-
-        if(collision.CompareTag("L_Sword"))
+        if (collision.CompareTag("L_Sword"))
         {
             TakeDamage(5);
         }
-
         if (collision.CompareTag("R_Sword"))
         {
             TakeDamage(5);
         }
+
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.tag == "L_Sword" )
+        {
+            TakeDamage(5);
+        }
+
+        if (collision.gameObject.tag == "R_Sword")
+        {
+            TakeDamage(5);
+        }
+    }
+
 }
 
 

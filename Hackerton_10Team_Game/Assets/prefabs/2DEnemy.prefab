@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a98bbf901c19e41bbab65f550bc122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPlayer: {fileID: 0}
+  targetPlayer: {fileID: 1611144253668241755, guid: 54bd5995410074a47b0a781421d386c1, type: 3}
   patrolSpeed: 2
   range: 1.5
   distance: 0
