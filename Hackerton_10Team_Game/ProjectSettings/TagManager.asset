@@ -14,6 +14,9 @@ TagManager:
   - R_EndPoint
   - L_Sword
   - R_Sword
+  - L_enemy
+  - R_enemy
+  - Enemy_Att
   layers:
   - Default
   - TransparentFX
@@ -21,8 +24,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Enemy
+  - EnemyWeapon
   - 
   - 
   - 

@@ -13,18 +13,20 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private float range = 0f;
     [SerializeField] private float distance;
-    [SerializeField] private int moveFlag = 0;
+    [SerializeField] public int moveFlag = 0;
 
     [SerializeField] private int hp = 10;
+    public GameObject Player;
 
     private Vector3 move;
-
+    public GameObject enemy;
     private bool isTraceAtk = false;
 
-    Animator animator;
+    public Animator animator;
     SpriteRenderer spriter;
     Rigidbody2D rgb2d;
     Collider2D coll;
+    bool isAtt= true;
 
     private void Start()
     {
@@ -39,7 +41,12 @@ public class EnemyController : MonoBehaviour
     {
         Move();
     }
-
+    IEnumerator NormalAttack()
+    {
+        yield return new WaitForSeconds(3f);
+        animator.SetTrigger("ATK");
+        enemy.GetComponent<EnemyAttMgr>().EnemyAtt();
+    }
     IEnumerator HitEffect()
     {
         spriter.color = new Color32(255, 255, 255, 160);
@@ -53,31 +60,55 @@ public class EnemyController : MonoBehaviour
         moveFlag = Random.Range(-1, 2);
         if (moveFlag == 0)
         {
-            // animator.SetBool("isPatrol", false); // 걷는 모션 비활성화
+            animator.SetBool("isPatrol", false); // 걷는 모션 비활성화
         }
         else
         {
-            // animator.SetBool("isPatrol", true);  // 걷는 모션 활성화
+            animator.SetBool("isPatrol", true);  // 걷는 모션 활성화
         }
 
         yield return new WaitForSeconds(3f);
 
         StartCoroutine(PatrolMove());
     }
-
+    /*if (distance <= range && !isTraceAtk)
+        {
+            Debug.Log("AA");
+            isTraceAtk = true;
+            if (isAttack)
+            {
+                animator.SetTrigger("Attack");
+                boss.GetComponent<BossAttMgr>().BossAttack();
+                isAttack = false;
+            }
+            StartCoroutine("NormalAttack");
+        }
+        else if (distance > range && isTraceAtk)
+        {
+            Debug.Log("BB");
+            isTraceAtk = false;
+            isAttack = true;
+        }*/
     private void Move()
     {
         Vector3 movevelocity = Vector3.zero;
         distance = Vector3.Distance(transform.position, targetPlayer.position);
         string distFlag = "";
-
-        if (distance <= range)
+        if (distance <= range && !isTraceAtk)
         {
             isTraceAtk = true;
+            
+            if(isAtt)
+            {
+                StartCoroutine("NormalAttack");
+                isAtt = false;
+            }
+            StartCoroutine("NormalAttack");
         }
-        else if (distance > range)
+        else if (distance > range && isTraceAtk)
         {
             isTraceAtk = false;
+            isAtt = true;
         }
 
 
@@ -89,12 +120,14 @@ public class EnemyController : MonoBehaviour
             if (playerPos.x < transform.position.x)
             {
                 transform.localScale = new Vector3(-1, 1, 1);
+            
             }
             else if (playerPos.x > transform.position.x)
             {
                 transform.localScale = new Vector3(1, 1, 1);
+             
             }
-            //animator.SetTrigger(""); // 공격 애니메이션 적용
+            animator.SetTrigger("ATK"); // 공격 애니메이션 적용
         }
         else
         {
@@ -160,6 +193,7 @@ public class EnemyController : MonoBehaviour
         {
             TakeDamage(5);
         }
+        
 
     }
 

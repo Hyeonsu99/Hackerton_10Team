@@ -127,7 +127,7 @@ public class playerCtrl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy")) //적 무기 태그 설정
+        if (collision.CompareTag("Enemy_Att")) //적 무기 태그 설정
         {
             life--;
             if(life <= 0)
