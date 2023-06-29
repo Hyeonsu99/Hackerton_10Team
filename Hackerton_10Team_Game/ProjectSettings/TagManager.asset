@@ -10,6 +10,8 @@ TagManager:
   - potal1
   - Undefined
   - 2floor
+  - L_EndPoint
+  - R_EndPoint
   layers:
   - Default
   - TransparentFX
@@ -46,4 +48,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3441792417
+    locked: 0
+  - name: Foreground
+    uniqueID: 3237206683
+    locked: 0
+  - name: ship
+    uniqueID: 2676008295
     locked: 0
