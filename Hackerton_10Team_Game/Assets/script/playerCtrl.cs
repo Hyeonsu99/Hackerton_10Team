@@ -86,7 +86,7 @@ public class playerCtrl : MonoBehaviour
     {
         PS = PlayerState.Att;    
         anim.SetTrigger("Att");
-        
+        soundPlay(0, GetAudioClip(0));
         if (PV == PlayerVector.Left)
         {
             RenderObj.GetComponent<SpriteRenderer>().flipX = true;
@@ -104,6 +104,7 @@ public class playerCtrl : MonoBehaviour
         if(jumpCount ==1)
         {
             anim.SetTrigger("Jump");
+            soundPlay(1, GetAudioClip(1));
             this.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,f_jumpPower));
         }
         
