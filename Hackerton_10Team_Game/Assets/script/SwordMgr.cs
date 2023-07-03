@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class SwordMgr : MonoBehaviour
 {
-    public GameObject swordRPos;
-    public GameObject swordLPos;
+    public GameObject swordR;
+    public GameObject swordL;
+    public Transform swordRPos;
+    public Transform swordLPos;
     public GameObject player;
-    public Transform playerATK;
-    GameObject sword;
-
- 
+   
+   
 
     public void buttonDownAtt()
     {
@@ -32,7 +32,6 @@ public class SwordMgr : MonoBehaviour
             Destroy(sword, 0.5f);
         }
     }
-    
    
 
 }

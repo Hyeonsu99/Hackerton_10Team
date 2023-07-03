@@ -16,7 +16,8 @@ public enum PlayerVector
 }
 public class playerCtrl : MonoBehaviour
 {
-    
+    [SerializeField] private PlayerHP_Controller playerHP_Controller;
+    public int life = 10;
     public float f_jumpPower = 400f;
     public AudioClip[] Sound;
     public Animator anim;
@@ -122,8 +123,7 @@ public class playerCtrl : MonoBehaviour
         GetComponent<AudioSource>().clip = audioClip;
         GetComponent<AudioSource>().Play();
     }
-     [SerializeField] private PlayerHP_Controller playerHP_Controller;
-    public int life = 10;
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -131,6 +131,22 @@ public class playerCtrl : MonoBehaviour
         {
             life--;
             if(life <= 0)
+            {
+                GameOver();
+            }
+        }
+        else if(collision.CompareTag("R_bossAtt"))
+        {
+            life--;
+            if (life <= 0)
+            {
+                GameOver();
+            }
+        }
+        else if(collision.CompareTag("L_bossAtt"))
+        {
+            life--;
+            if (life <= 0)
             {
                 GameOver();
             }
