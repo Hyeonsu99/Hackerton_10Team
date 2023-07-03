@@ -86,13 +86,15 @@ public class playerCtrl : MonoBehaviour
     {
         PS = PlayerState.Att;    
         anim.SetTrigger("Att");
-        
+   
         if (PV == PlayerVector.Left)
         {
+            soundPlay(0, GetAudioClip(0));
             RenderObj.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (PV == PlayerVector.Right)
         {
+            soundPlay(0, GetAudioClip(0));
             RenderObj.GetComponent<SpriteRenderer>().flipX = false;
         }
 
@@ -104,6 +106,7 @@ public class playerCtrl : MonoBehaviour
         if(jumpCount ==1)
         {
             anim.SetTrigger("Jump");
+            soundPlay(1, GetAudioClip(1));
             this.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,f_jumpPower));
         }
         
@@ -111,8 +114,10 @@ public class playerCtrl : MonoBehaviour
     void GameOver()
     {
         PS = PlayerState.Death;
-        SceneManager.LoadScene("");
+        SceneManager.LoadScene("DeathScene");
     }
+
+    
  
     private AudioClip GetAudioClip(int Num)
     {
@@ -127,7 +132,7 @@ public class playerCtrl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy_Att")) //적 무기 태그 설정
+        if (collision.CompareTag("Enemy")) //적 무기 태그 설정
         {
             life--;
             if(life <= 0)
@@ -144,6 +149,14 @@ public class playerCtrl : MonoBehaviour
             }
         }
         else if(collision.CompareTag("L_bossAtt"))
+        {
+            life--;
+            if (life <= 0)
+            {
+                GameOver();
+            }
+        }
+        else if(collision.CompareTag("Enemy_Att"))
         {
             life--;
             if (life <= 0)

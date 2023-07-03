@@ -45,7 +45,7 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         animator.SetTrigger("ATK");
-        enemy.GetComponent<EnemyAttMgr>().EnemyAtt();
+        GetComponentInChildren<EnemyAttMgr>().EnemyAtt();
     }
     IEnumerator HitEffect()
     {
@@ -71,24 +71,7 @@ public class EnemyController : MonoBehaviour
 
         StartCoroutine(PatrolMove());
     }
-    /*if (distance <= range && !isTraceAtk)
-        {
-            Debug.Log("AA");
-            isTraceAtk = true;
-            if (isAttack)
-            {
-                animator.SetTrigger("Attack");
-                boss.GetComponent<BossAttMgr>().BossAttack();
-                isAttack = false;
-            }
-            StartCoroutine("NormalAttack");
-        }
-        else if (distance > range && isTraceAtk)
-        {
-            Debug.Log("BB");
-            isTraceAtk = false;
-            isAttack = true;
-        }*/
+    
     private void Move()
     {
         Vector3 movevelocity = Vector3.zero;
@@ -197,7 +180,19 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.tag == "L_Sword" )
+        {
+            TakeDamage(5);
+        }
+
+        if (collision.gameObject.tag == "R_Sword")
+        {
+            TakeDamage(5);
+        }
+    }
 
 }
 

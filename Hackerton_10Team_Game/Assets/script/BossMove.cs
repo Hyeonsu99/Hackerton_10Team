@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +28,8 @@ public class BossMove : MonoBehaviour
     Collider2D coll;
     private bool isRealAtk = false;
     public GameObject boss;
+    Vector3 movevelocity;
+    private bool isDeath;
 
     private void Start()
     {
@@ -76,7 +79,10 @@ public class BossMove : MonoBehaviour
 
     private void Move()
     {
-        Vector3 movevelocity = Vector3.zero;
+        if (isDeath)
+            return;
+
+        movevelocity = Vector3.zero;
         distance = Vector3.Distance(transform.position, targetPlayer.position);
         string distFlag = "";
 
@@ -148,7 +154,6 @@ public class BossMove : MonoBehaviour
 
     public void HitDamage(int dmg)
     {
-        
         hp -= dmg;
 
         if (hp > 0)
@@ -157,12 +162,19 @@ public class BossMove : MonoBehaviour
         }
         else
         {
+            isDeath = true;
             animator.SetTrigger("Death");
-            Destroy(gameObject, 0.8f);
-
-            SceneManager.LoadScene(""); // 게임 클리어 씬
+            Destroy(gameObject, 1.7f);
         }
     }
+
+    private void OnDestroy()
+    {
+        SceneManager.LoadScene(4);
+    }
+
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
